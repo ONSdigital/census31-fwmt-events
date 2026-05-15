@@ -1,0 +1,22 @@
+language: java
+jdk: openjdk11
+before_install:
+  - echo "artifactory_user=${ARTIFACTORY_USERNAME}" >> ~/.gradle/gradle.properties
+  - echo "artifactory_password=${ARTIFACTORY_PASSWORD}" >> ~/.gradle/gradle.properties
+install: true
+script:
+- |
+  if [[ $TRAVIS_COMMIT_MESSAGE != 'CONCOURSE SNAPSHOT UPDATE' ]]; then
+      ./gradlew build  --info --refresh-dependencies ;
+  fi
+branches:
+  only:
+  - master
+before_cache:
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
+after_success:
