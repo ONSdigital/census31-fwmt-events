@@ -5,7 +5,6 @@ import com.google.pubsub.v1.PubsubMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import uk.gov.ons.census.fwmt.events.data.GatewayErrorEventDTO;
@@ -15,7 +14,6 @@ import uk.gov.ons.census.fwmt.events.messaging.GatewayEventJsonCodec;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "app.messaging.provider", havingValue = "pubsub")
 public class PubSubGatewayEventProducer implements GatewayEventProducer {
 
   private final PubSubTemplate pubSubTemplate;
