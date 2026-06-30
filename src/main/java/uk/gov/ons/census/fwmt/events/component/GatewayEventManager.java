@@ -35,7 +35,12 @@ public class GatewayEventManager {
         .caseId(caseId).source(source).eventType(eventType).localTime(new Date()).metadata(metaDataMap)
         .build();
     for (GatewayEventProducer gep : gatewayEventProducers) {
-      gep.sendEvent(gatewayEventDTO);
+      try {
+        gep.sendEvent(gatewayEventDTO);
+      } catch (RuntimeException ex) {
+        log.error("Producer {} failed to send event for case {}: {}",
+            gep.getClass().getSimpleName(), caseId, ex.getMessage(), ex);
+      }
     }
   }
 
@@ -73,8 +78,14 @@ public class GatewayEventManager {
         .caseId(caseId).errorEventType(errorEventType).source(source).localTime(new Date()).metadata(metaDataMap);
 
     builder.errorEventType(errorEventType);
+    GatewayErrorEventDTO errorEvent = builder.build();
     for (GatewayEventProducer gep : gatewayEventProducers) {
-      gep.sendErrorEvent(builder.build());
+      try {
+        gep.sendErrorEvent(errorEvent);
+      } catch (RuntimeException ex) {
+        log.error("Producer {} failed to send error event for case {}: {}",
+            gep.getClass().getSimpleName(), caseId, ex.getMessage(), ex);
+      }
     }
   }
 }

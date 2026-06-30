@@ -21,7 +21,7 @@ Every time an event occurs it is then logged as part of the process. These logs 
 ## Testing
 To test locally build jar to local using
 ```
-  ./gradlew clean publishToMavenLocal
+  mvn clean install
 ```
 
 
